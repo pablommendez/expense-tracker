@@ -1,4 +1,4 @@
-import { Result, ok, err } from '../../../shared/result/Result.js';
+import { Result, err } from '../../../shared/result/Result.js';
 import { ValidationError } from '../../../shared/errors/index.js';
 import { Expense, ExpenseCategory, ExpenseProps } from './Expense.js';
 import { ExpenseId } from './ExpenseId.js';

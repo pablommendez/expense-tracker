@@ -1,18 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { randomUUID } from 'crypto';
 
-declare global {
-  namespace Express {
-    interface Request {
-      correlationId: string;
-    }
-  }
-}
-
-/**
- * Middleware to ensure every request has a correlation ID
- * Uses X-Correlation-ID header if provided, otherwise generates a new UUID
- */
 export function correlationId(
   req: Request,
   res: Response,
@@ -26,3 +14,4 @@ export function correlationId(
 
   next();
 }
+

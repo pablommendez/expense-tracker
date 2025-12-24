@@ -2,7 +2,7 @@
  * Money Value Object - Unit Tests (TDD: RED first)
  */
 
-import { Money, Currency } from './Money.js';
+import { Money } from './Money.js';
 
 describe('Money', () => {
   describe('create', () => {

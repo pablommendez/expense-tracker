@@ -9,7 +9,6 @@ import {
   setupTestDatabase,
   cleanupTestDatabase,
   teardownTestDatabase,
-  getTestPrisma,
 } from '../../../../tests/testcontainers.setup.js';
 import { ExpenseController } from './expenseController.js';
 import { errorHandler } from '../../../shared/middleware/errorHandler.js';
