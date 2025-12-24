@@ -1,0 +1,28 @@
+// Prisma schema for Expense Tracker API
+// https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Expense table - stores financial expense records
+model Expense {
+  id          String   @id @default(uuid()) @db.Uuid
+  description String   @db.VarChar(500)
+  amount      Decimal  @db.Decimal(19, 2)
+  currency    String   @db.VarChar(3)
+  category    String   @db.VarChar(50)
+  expenseDate DateTime @map("expense_date") @db.Timestamptz
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([expenseDate], name: "idx_expense_date")
+  @@index([category], name: "idx_category")
+  @@index([createdAt], name: "idx_created_at")
+  @@map("expenses")
+}
