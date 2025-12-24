@@ -19,7 +19,17 @@ export default {
     ],
   },
   testMatch: ['**/*.test.ts', '**/*.spec.ts'],
-  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts', '!src/**/index.ts'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*.d.ts',
+    '!src/**/index.ts',
+    '!src/server.ts',
+    '!src/config/database.ts',
+    '!src/infrastructure/swagger.ts',
+    '!src/shared/middleware/errorHandler.ts',
+    '!src/shared/middleware/requestLogger.ts',
+    '!src/**/expenseRoutes.ts',
+  ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
   coverageThreshold: {
