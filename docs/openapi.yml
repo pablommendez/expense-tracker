@@ -250,7 +250,16 @@ components:
           example: USD
         category:
           type: string
-          enum: [GROCERIES, TRANSPORTATION, ENTERTAINMENT, UTILITIES, HEALTHCARE, HOUSING, OTHER]
+          enum:
+            [
+              GROCERIES,
+              TRANSPORTATION,
+              ENTERTAINMENT,
+              UTILITIES,
+              HEALTHCARE,
+              HOUSING,
+              OTHER,
+            ]
           example: GROCERIES
         expenseDate:
           type: string
@@ -288,7 +297,16 @@ components:
           description: Currency code
         category:
           type: string
-          enum: [GROCERIES, TRANSPORTATION, ENTERTAINMENT, UTILITIES, HEALTHCARE, HOUSING, OTHER]
+          enum:
+            [
+              GROCERIES,
+              TRANSPORTATION,
+              ENTERTAINMENT,
+              UTILITIES,
+              HEALTHCARE,
+              HOUSING,
+              OTHER,
+            ]
           description: Expense category
         expenseDate:
           type: string
@@ -313,7 +331,16 @@ components:
           description: Currency code
         category:
           type: string
-          enum: [GROCERIES, TRANSPORTATION, ENTERTAINMENT, UTILITIES, HEALTHCARE, HOUSING, OTHER]
+          enum:
+            [
+              GROCERIES,
+              TRANSPORTATION,
+              ENTERTAINMENT,
+              UTILITIES,
+              HEALTHCARE,
+              HOUSING,
+              OTHER,
+            ]
           description: Expense category
         expenseDate:
           type: string

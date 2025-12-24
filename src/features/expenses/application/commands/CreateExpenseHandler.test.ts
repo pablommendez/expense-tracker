@@ -71,7 +71,9 @@ describe('CreateExpenseHandler', () => {
       if (result.isOk()) {
         const responseDate = new Date(result.value.expenseDate);
         // Check that the date is between before and after test execution
-        expect(responseDate.getTime()).toBeGreaterThanOrEqual(beforeTest.getTime() - 1000);
+        expect(responseDate.getTime()).toBeGreaterThanOrEqual(
+          beforeTest.getTime() - 1000
+        );
         expect(responseDate.getTime()).toBeLessThanOrEqual(afterTest.getTime() + 1000);
       }
     });
@@ -94,7 +96,9 @@ describe('CreateExpenseHandler', () => {
       expect(result.isOk()).toBe(true);
       if (result.isOk()) {
         const responseDate = new Date(result.value.expenseDate);
-        expect(responseDate.getTime()).toBeGreaterThanOrEqual(beforeTest.getTime() - 1000);
+        expect(responseDate.getTime()).toBeGreaterThanOrEqual(
+          beforeTest.getTime() - 1000
+        );
         expect(responseDate.getTime()).toBeLessThanOrEqual(afterTest.getTime() + 1000);
       }
     });

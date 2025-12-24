@@ -6,7 +6,6 @@ import { createServer } from './server.js';
 import { logger } from './shared/logger.js';
 import { setupSwagger } from './infrastructure/swagger.js';
 
-
 const PORT = process.env.PORT ?? 3000;
 
 async function main(): Promise<void> {

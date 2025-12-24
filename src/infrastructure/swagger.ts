@@ -49,10 +49,7 @@ export async function setupSwagger(app: Express): Promise<void> {
 
     // Mount Swagger UI at /api-docs
     app.use('/api-docs', swaggerUi.serve);
-    app.get(
-      '/api-docs',
-      swaggerUi.setup(openApiSpec, swaggerUiOptions),
-    );
+    app.get('/api-docs', swaggerUi.setup(openApiSpec, swaggerUiOptions));
 
     console.log('✓ Swagger UI initialized at http://localhost:3000/api-docs');
   } catch (error) {
