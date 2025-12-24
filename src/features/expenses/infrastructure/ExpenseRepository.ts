@@ -68,9 +68,7 @@ export class ExpenseRepository {
   /**
    * Find expense by ID (READ)
    */
-  async findByIdAsync(
-    id: ExpenseId
-  ): Promise<Result<Expense, NotFoundError | Error>> {
+  async findByIdAsync(id: ExpenseId): Promise<Result<Expense, NotFoundError | Error>> {
     try {
       const prismaExpense = await this.prisma.expense.findUnique({
         where: { id: id.toString() },

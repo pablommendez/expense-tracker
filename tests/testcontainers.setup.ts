@@ -2,7 +2,10 @@
  * Testcontainers setup for PostgreSQL integration tests
  */
 
-import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import {
+  PostgreSqlContainer,
+  StartedPostgreSqlContainer,
+} from '@testcontainers/postgresql';
 import { PrismaClient } from '@prisma/client';
 import { execSync } from 'child_process';
 

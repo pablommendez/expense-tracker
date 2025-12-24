@@ -57,13 +57,9 @@ export function errorHandler(
   }
 
   // Unexpected errors -> 500
-  logger.error(
-    { error, correlationId, stack: error.stack },
-    'Unexpected error'
-  );
+  logger.error({ error, correlationId, stack: error.stack }, 'Unexpected error');
   res.status(500).json({
     error: 'Internal server error',
-    message:
-      process.env.NODE_ENV === 'production' ? 'An error occurred' : error.message,
+    message: process.env.NODE_ENV === 'production' ? 'An error occurred' : error.message,
   });
 }

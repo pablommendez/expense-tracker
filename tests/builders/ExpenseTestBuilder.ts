@@ -3,7 +3,12 @@
  * Provides convenient defaults for testing
  */
 
-import { Expense, ExpenseBuilder, ExpenseCategory, Currency } from '../../src/features/expenses/domain/index.js';
+import {
+  Expense,
+  ExpenseBuilder,
+  ExpenseCategory,
+  Currency,
+} from '../../src/features/expenses/domain/index.js';
 
 export class ExpenseTestBuilder {
   private description = 'Test expense';

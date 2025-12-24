@@ -4,11 +4,7 @@ import { logger } from '../logger.js';
 /**
  * Middleware to log HTTP requests with correlation ID and latency
  */
-export function requestLogger(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
+export function requestLogger(req: Request, res: Response, next: NextFunction): void {
   const startTime = Date.now();
 
   // Log request

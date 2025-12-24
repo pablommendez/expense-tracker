@@ -47,15 +47,13 @@ describe('ExpenseController', () => {
 
   describe('POST /api/v1/expenses', () => {
     it('should create expense and return 201', async () => {
-      const response = await request(app)
-        .post('/api/v1/expenses')
-        .send({
-          description: 'Test expense',
-          amount: 100.5,
-          currency: 'USD',
-          category: 'food',
-          expenseDate: '2025-12-20T12:00:00.000Z',
-        });
+      const response = await request(app).post('/api/v1/expenses').send({
+        description: 'Test expense',
+        amount: 100.5,
+        currency: 'USD',
+        category: 'food',
+        expenseDate: '2025-12-20T12:00:00.000Z',
+      });
 
       expect(response.status).toBe(201);
       expect(response.body.id).toBeDefined();
@@ -66,15 +64,13 @@ describe('ExpenseController', () => {
     });
 
     it('should return 400 for invalid data', async () => {
-      const response = await request(app)
-        .post('/api/v1/expenses')
-        .send({
-          description: '',
-          amount: -10,
-          currency: 'INVALID',
-          category: 'invalid',
-          expenseDate: 'not-a-date',
-        });
+      const response = await request(app).post('/api/v1/expenses').send({
+        description: '',
+        amount: -10,
+        currency: 'INVALID',
+        category: 'invalid',
+        expenseDate: 'not-a-date',
+      });
 
       expect(response.status).toBe(400);
       expect(response.body.error).toBe('Validation failed');
@@ -82,9 +78,7 @@ describe('ExpenseController', () => {
     });
 
     it('should return 400 for missing required fields', async () => {
-      const response = await request(app)
-        .post('/api/v1/expenses')
-        .send({});
+      const response = await request(app).post('/api/v1/expenses').send({});
 
       expect(response.status).toBe(400);
       expect(response.body.error).toBe('Validation failed');
@@ -94,15 +88,13 @@ describe('ExpenseController', () => {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 10);
 
-      const response = await request(app)
-        .post('/api/v1/expenses')
-        .send({
-          description: 'Future expense',
-          amount: 100,
-          currency: 'USD',
-          category: 'food',
-          expenseDate: futureDate.toISOString(),
-        });
+      const response = await request(app).post('/api/v1/expenses').send({
+        description: 'Future expense',
+        amount: 100,
+        currency: 'USD',
+        category: 'food',
+        expenseDate: futureDate.toISOString(),
+      });
 
       expect(response.status).toBe(400);
     });
@@ -111,15 +103,13 @@ describe('ExpenseController', () => {
   describe('GET /api/v1/expenses/:id', () => {
     it('should return expense by ID', async () => {
       // First create an expense
-      const createResponse = await request(app)
-        .post('/api/v1/expenses')
-        .send({
-          description: 'Test expense',
-          amount: 100,
-          currency: 'USD',
-          category: 'food',
-          expenseDate: '2025-12-20T12:00:00.000Z',
-        });
+      const createResponse = await request(app).post('/api/v1/expenses').send({
+        description: 'Test expense',
+        amount: 100,
+        currency: 'USD',
+        category: 'food',
+        expenseDate: '2025-12-20T12:00:00.000Z',
+      });
 
       const id = createResponse.body.id;
 
@@ -193,16 +183,16 @@ describe('ExpenseController', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.data).toHaveLength(2);
-      expect(response.body.data.every((e: { category: string }) => e.category === 'food')).toBe(true);
+      expect(
+        response.body.data.every((e: { category: string }) => e.category === 'food')
+      ).toBe(true);
     });
 
     it('should filter by date range', async () => {
-      const response = await request(app)
-        .get('/api/v1/expenses')
-        .query({
-          startDate: '2025-12-19T00:00:00.000Z',
-          endDate: '2025-12-20T23:59:59.999Z',
-        });
+      const response = await request(app).get('/api/v1/expenses').query({
+        startDate: '2025-12-19T00:00:00.000Z',
+        endDate: '2025-12-20T23:59:59.999Z',
+      });
 
       expect(response.status).toBe(200);
       expect(response.body.data).toHaveLength(2);
@@ -231,25 +221,21 @@ describe('ExpenseController', () => {
   describe('PUT /api/v1/expenses/:id', () => {
     it('should update expense and return 200', async () => {
       // Create expense
-      const createResponse = await request(app)
-        .post('/api/v1/expenses')
-        .send({
-          description: 'Original description',
-          amount: 100,
-          currency: 'USD',
-          category: 'food',
-          expenseDate: '2025-12-20T12:00:00.000Z',
-        });
+      const createResponse = await request(app).post('/api/v1/expenses').send({
+        description: 'Original description',
+        amount: 100,
+        currency: 'USD',
+        category: 'food',
+        expenseDate: '2025-12-20T12:00:00.000Z',
+      });
 
       const id = createResponse.body.id;
 
       // Update
-      const response = await request(app)
-        .put(`/api/v1/expenses/${id}`)
-        .send({
-          description: 'Updated description',
-          category: 'transport',
-        });
+      const response = await request(app).put(`/api/v1/expenses/${id}`).send({
+        description: 'Updated description',
+        category: 'transport',
+      });
 
       expect(response.status).toBe(200);
       expect(response.body.description).toBe('Updated description');
@@ -268,24 +254,20 @@ describe('ExpenseController', () => {
 
     it('should return 400 for invalid update data', async () => {
       // Create expense
-      const createResponse = await request(app)
-        .post('/api/v1/expenses')
-        .send({
-          description: 'Test',
-          amount: 100,
-          currency: 'USD',
-          category: 'food',
-          expenseDate: '2025-12-20T12:00:00.000Z',
-        });
+      const createResponse = await request(app).post('/api/v1/expenses').send({
+        description: 'Test',
+        amount: 100,
+        currency: 'USD',
+        category: 'food',
+        expenseDate: '2025-12-20T12:00:00.000Z',
+      });
 
       const id = createResponse.body.id;
 
       // Invalid update
-      const response = await request(app)
-        .put(`/api/v1/expenses/${id}`)
-        .send({
-          description: '',
-        });
+      const response = await request(app).put(`/api/v1/expenses/${id}`).send({
+        description: '',
+      });
 
       expect(response.status).toBe(400);
     });
@@ -294,15 +276,13 @@ describe('ExpenseController', () => {
   describe('DELETE /api/v1/expenses/:id', () => {
     it('should delete expense and return 204', async () => {
       // Create expense
-      const createResponse = await request(app)
-        .post('/api/v1/expenses')
-        .send({
-          description: 'To be deleted',
-          amount: 100,
-          currency: 'USD',
-          category: 'food',
-          expenseDate: '2025-12-20T12:00:00.000Z',
-        });
+      const createResponse = await request(app).post('/api/v1/expenses').send({
+        description: 'To be deleted',
+        amount: 100,
+        currency: 'USD',
+        category: 'food',
+        expenseDate: '2025-12-20T12:00:00.000Z',
+      });
 
       const id = createResponse.body.id;
 

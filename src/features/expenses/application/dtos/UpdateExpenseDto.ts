@@ -16,15 +16,12 @@ export const UpdateExpenseDtoSchema = z.object({
     })
     .optional(),
   category: z
-    .enum(
-      ['food', 'transport', 'entertainment', 'utilities', 'healthcare', 'other'],
-      {
-        errorMap: () => ({
-          message:
-            'Category must be one of: food, transport, entertainment, utilities, healthcare, other',
-        }),
-      }
-    )
+    .enum(['food', 'transport', 'entertainment', 'utilities', 'healthcare', 'other'], {
+      errorMap: () => ({
+        message:
+          'Category must be one of: food, transport, entertainment, utilities, healthcare, other',
+      }),
+    })
     .optional(),
   expenseDate: z
     .string()
