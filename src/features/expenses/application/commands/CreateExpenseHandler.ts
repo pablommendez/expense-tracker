@@ -21,7 +21,7 @@ export class CreateExpenseHandler {
       .withDescription(dto.description)
       .withAmount(dto.amount, dto.currency as Currency)
       .withCategory(dto.category as ExpenseCategory)
-      .withExpenseDate(new Date(dto.expenseDate))
+      .withExpenseDate(dto.expenseDate ? new Date(dto.expenseDate) : new Date())
       .build();
 
     if (expenseResult.isErr()) {

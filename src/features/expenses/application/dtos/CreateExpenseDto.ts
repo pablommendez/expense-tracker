@@ -23,7 +23,8 @@ export const CreateExpenseDtoSchema = z.object({
   ),
   expenseDate: z
     .string()
-    .datetime({ message: 'Expense date must be a valid ISO 8601 date' }),
+    .datetime({ message: 'Expense date must be a valid ISO 8601 date' })
+    .optional(),
 });
 
 export type CreateExpenseDto = z.infer<typeof CreateExpenseDtoSchema>;

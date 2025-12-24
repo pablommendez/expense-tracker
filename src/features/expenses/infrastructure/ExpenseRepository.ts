@@ -78,7 +78,11 @@ export class ExpenseRepository {
         return err(new NotFoundError('Expense', id.toString()));
       }
 
-      return this.toDomain(prismaExpense);
+      const domainResult = this.toDomain(prismaExpense);
+      if (domainResult.isErr()) {
+        return err(domainResult.error as Error);
+      }
+      return ok(domainResult.value);
     } catch (error) {
       return err(error as Error);
     }

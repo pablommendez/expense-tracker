@@ -1,0 +1,399 @@
+openapi: 3.1.0
+info:
+  title: Expense Tracker API
+  description: |
+    REST API for managing personal expenses with categories and filtering.
+
+    **Import into Postman:**
+    - Open Postman
+    - Click Import → Select this YAML file
+    - All endpoints, schemas, and examples will be imported
+
+    **View Swagger UI:**
+    - Access `/api-docs` endpoint during development
+  version: 1.0.0
+  contact:
+    name: API Support
+    url: https://example.com/support
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+  - url: https://api.example.com
+    description: Production server
+
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Returns API health status
+      tags:
+        - System
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /api/v1/expenses:
+    get:
+      summary: List all expenses
+      description: Retrieve a paginated list of expenses with optional filters
+      tags:
+        - Expenses
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number (1-indexed)
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+          description: Items per page
+        - name: category
+          in: query
+          schema:
+            type: string
+          description: Filter by expense category
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filter expenses from this date (inclusive)
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filter expenses until this date (inclusive)
+      responses:
+        '200':
+          description: List of expenses with pagination
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Expense'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Create a new expense
+      description: Create a new expense with validation
+      tags:
+        - Expenses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExpenseRequest'
+            examples:
+              example1:
+                summary: Grocery shopping
+                value:
+                  description: Weekly grocery shopping
+                  amount: 125.50
+                  currency: USD
+                  category: GROCERIES
+                  expenseDate: 2024-12-24
+      responses:
+        '201':
+          description: Expense created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v1/expenses/{id}:
+    get:
+      summary: Get an expense by ID
+      description: Retrieve a single expense by its unique identifier
+      tags:
+        - Expenses
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Expense ID
+      responses:
+        '200':
+          description: Expense found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    patch:
+      summary: Update an expense
+      description: Partially update an expense
+      tags:
+        - Expenses
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Expense ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExpenseRequest'
+      responses:
+        '200':
+          description: Expense updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      summary: Delete an expense
+      description: Permanently delete an expense
+      tags:
+        - Expenses
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Expense ID
+      responses:
+        '204':
+          description: Expense deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+          example: healthy
+
+    Expense:
+      type: object
+      required:
+        - id
+        - description
+        - amount
+        - currency
+        - category
+        - expenseDate
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        description:
+          type: string
+          minLength: 1
+          maxLength: 500
+          example: Grocery shopping
+        amount:
+          type: number
+          format: decimal
+          example: 125.50
+          description: Amount in the specified currency
+        currency:
+          type: string
+          enum: [USD, EUR, GBP, JPY, CAD, AUD]
+          example: USD
+        category:
+          type: string
+          enum: [GROCERIES, TRANSPORTATION, ENTERTAINMENT, UTILITIES, HEALTHCARE, HOUSING, OTHER]
+          example: GROCERIES
+        expenseDate:
+          type: string
+          format: date
+          example: 2024-12-24
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-12-24T10:00:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-12-24T10:00:00Z
+
+    CreateExpenseRequest:
+      type: object
+      required:
+        - description
+        - amount
+        - currency
+        - category
+      properties:
+        description:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: Expense description
+        amount:
+          type: number
+          format: decimal
+          description: Expense amount
+        currency:
+          type: string
+          enum: [USD, EUR, GBP, JPY, CAD, AUD]
+          description: Currency code
+        category:
+          type: string
+          enum: [GROCERIES, TRANSPORTATION, ENTERTAINMENT, UTILITIES, HEALTHCARE, HOUSING, OTHER]
+          description: Expense category
+        expenseDate:
+          type: string
+          format: date
+          description: Date of the expense. Defaults to today if not provided.
+
+    UpdateExpenseRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: Expense description
+        amount:
+          type: number
+          format: decimal
+          description: Expense amount
+        currency:
+          type: string
+          enum: [USD, EUR, GBP, JPY, CAD, AUD]
+          description: Currency code
+        category:
+          type: string
+          enum: [GROCERIES, TRANSPORTATION, ENTERTAINMENT, UTILITIES, HEALTHCARE, HOUSING, OTHER]
+          description: Expense category
+        expenseDate:
+          type: string
+          format: date
+          description: Date of the expense
+
+    Pagination:
+      type: object
+      required:
+        - page
+        - limit
+        - total
+        - totalPages
+      properties:
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 42
+        totalPages:
+          type: integer
+          example: 3
+
+    Error:
+      type: object
+      required:
+        - message
+        - code
+      properties:
+        message:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code for programmatic handling
+        details:
+          type: object
+          nullable: true
+          description: Additional error context
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters or validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: Validation failed
+            code: VALIDATION_ERROR
+            details:
+              field: amount
+              reason: Amount must be greater than 0
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: Expense not found
+            code: NOT_FOUND
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: Internal server error
+            code: INTERNAL_ERROR
+
+tags:
+  - name: System
+    description: System health and status endpoints
+  - name: Expenses
+    description: Expense management endpoints
